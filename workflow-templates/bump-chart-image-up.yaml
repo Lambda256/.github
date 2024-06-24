@@ -1,0 +1,40 @@
+name: Bump chart docker image up
+
+on:
+  repository_dispatch:
+    types:
+      - webhook
+
+concurrency: ${{ github.workflow }}
+
+jobs:
+  bump:
+    name: Bump up
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          ref: 'refs/heads/main'
+      - name: Set Up Git Config
+        run: |
+          git config --global user.email "devops@lambda256.io"
+          git config --global user.name "luniverse-devops"
+      - name: Bump Chart Image
+        working-directory: ${{ github.event.client_payload.group }}/${{ github.event.client_payload.applicationName }}
+        run: |
+          if [ "${{ github.event.client_payload.ref_name }}" == "develop" ]; then
+            sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_dev.yaml
+            git add values_dev.yaml
+            git commit -m "ci: Change img at dev to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
+          elif [ "${{ github.event.client_payload.ref_name }}" == "main" ]; then
+            sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_stg.yaml
+            sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_prd.yaml
+            git add values_stg.yaml values_prd.yaml
+            git commit -m "ci: Change img at stg,prd to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
+          fi
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PA_TOKEN_LUNIVERSEDEVOPS }}
+          branch: ${{ github.event.client_payload.ref }}

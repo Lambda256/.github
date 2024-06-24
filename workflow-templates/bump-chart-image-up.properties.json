@@ -1,0 +1,11 @@
+{
+    "name": "Bump chart docker image up",
+    "description": "CI workflow - Bump chart docker image up.",
+    "iconName": "octicon checkbox",
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
+

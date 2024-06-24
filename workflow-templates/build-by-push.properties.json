@@ -1,0 +1,11 @@
+{
+    "name": "Docker Build by push",
+    "description": "CI workflow - Docker Build by push.",
+    "iconName": "octicon check-circle",
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
+
