@@ -1,0 +1,11 @@
+{
+    "name": "Docker Build by tagging",
+    "description": "CI workflow - Docker Build by tagging.",
+    "iconName": "octicon tag",
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
+
