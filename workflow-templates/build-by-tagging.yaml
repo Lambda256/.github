@@ -3,7 +3,7 @@ name: Docker Build by tagging
 on:
   create:
     tags:
-      - *
+      - '*'
 
 concurrency:
   group: ${{ github.ref }}
