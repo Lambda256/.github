@@ -21,7 +21,7 @@ jobs:
           git config --global user.email "devops@lambda256.io"
           git config --global user.name "luniverse-devops"
       - name: Bump Chart Image
-        working-directory: ${{ github.event.client_payload.group }}/${{ github.event.client_payload.applicationName }}
+        working-directory: service/${{ github.event.client_payload.applicationName }}
         run: |
           if [ "${{ github.event.client_payload.ref_name }}" == "develop" ]; then
             sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_dev.yaml
