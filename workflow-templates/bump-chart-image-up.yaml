@@ -23,15 +23,23 @@ jobs:
       - name: Bump Chart Image
         working-directory: service/${{ github.event.client_payload.applicationName }}
         run: |
-          if [ "${{ github.event.client_payload.ref_name }}" == "develop" ]; then
-            sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_dev.yaml
-            git add values_dev.yaml
-            git commit -m "ci: Change img at dev to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
-          elif [ "${{ github.event.client_payload.ref_name }}" == "main" ]; then
-            sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_stg.yaml
-            sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_prd.yaml
-            git add values_stg.yaml values_prd.yaml
-            git commit -m "ci: Change img at stg,prd to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
+          if [ "${{ github.event.client_payload.stage }}" != "" ]; then
+            if [ -e "values_${{ github.event.client_payload.stage }}.yaml" ]; then
+              sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_${{ github.event.client_payload.stage }}.yaml
+              git add values_${{ github.event.client_payload.stage }}.yaml
+              git commit -m "ci: Change img at ${{ github.event.client_payload.stage }} to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
+            fi
+          else
+            if [ "${{ github.event.client_payload.ref_name }}" == "develop" ]; then
+              sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_dev.yaml
+              git add values_dev.yaml
+              git commit -m "ci: Change img at dev to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
+            elif [ "${{ github.event.client_payload.ref_name }}" == "main" ]; then
+              sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_stg.yaml
+              sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_prd.yaml
+              git add values_stg.yaml values_prd.yaml
+              git commit -m "ci: Change img at stg,prd to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
+            fi
           fi
       - name: Push changes
         uses: ad-m/github-push-action@master

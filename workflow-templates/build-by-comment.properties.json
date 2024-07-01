@@ -1,0 +1,11 @@
+{
+    "name": "Docker Build by comment",
+    "description": "CI workflow - Docker Build by comment '/build'.",
+    "iconName": "octicon comment",
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
+
