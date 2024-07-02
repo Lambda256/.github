@@ -1,7 +1,7 @@
 {
     "name": "Migrate db by comment",
     "description": "CI workflow - Migrate luniverse-dev database by comment '/migrate dev'.",
-    "iconName": "octicon comment",
+    "iconName": "octicon database",
     "filePatterns": [
         "package.json$",
         "^Dockerfile",
