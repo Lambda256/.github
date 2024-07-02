@@ -25,7 +25,7 @@ jobs:
         run: |
           if [ "${{ github.event.client_payload.stage }}" != "" ]; then
             if [ -e "values_${{ github.event.client_payload.stage }}.yaml" ]; then
-              sed -i "s#image: .*#image: ${{ github.event.client_payload.imageTag }}#" values_${{ github.event.client_payload.stage }}.yaml
+              sed -i "s@image: .*@image: ${{ github.event.client_payload.imageTag }}@" values_${{ github.event.client_payload.stage }}.yaml
               git add values_${{ github.event.client_payload.stage }}.yaml
               git commit -m "ci: Change img at ${{ github.event.client_payload.stage }} to ${{ github.event.client_payload.imageTag }} by ${{ github.event.client_payload.actor }}"
             fi
