@@ -43,7 +43,7 @@ jobs:
           file: ./deploy/app/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: lambda256/{{ steps.name.outputs.value }}#${{ env.TAG }}
+          tags: lambda256/${{ steps.name.outputs.value }}#${{ env.TAG }}
           build-args: |
             "PAU=${{vars.PA_USERNAME_LUNIVERSEDEVOPS}}"
             "PAT=${{secrets.PA_TOKEN_LUNIVERSEDEVOPS}}"
@@ -57,7 +57,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "image": "lambda256/{{ steps.name.outputs.value }}#${{ env.TAG }}"
+              "image": "lambda256/${{ steps.name.outputs.value }}#${{ env.TAG }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ vars.SLACK_WEBHOOK_URL }}
