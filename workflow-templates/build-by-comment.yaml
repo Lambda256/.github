@@ -60,7 +60,6 @@ jobs:
           push: true
           tags: lambda256/${{ steps.name.outputs.value }}:v${{ steps.version.outputs.value }}-${{ env.COMMIT_SHA }}
           build-args: |
-            "PAU=${{ vars.PA_USERNAME_LUNIVERSEDEVOPS }}"
             "PAT=${{ secrets.PA_TOKEN_LUNIVERSEDEVOPS }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
