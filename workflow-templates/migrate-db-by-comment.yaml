@@ -2,10 +2,10 @@ name: Migrate luniverse-dev database by comment '/migrate dev'
 
 on:
   issue_comment:
-    types: [created]
+    types: [ created ]
 
 concurrency:
-  group: ${{ github.ref }}
+  group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
