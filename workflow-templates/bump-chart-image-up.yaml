@@ -14,12 +14,12 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-        with:
-          ref: 'refs/heads/main'
+
       - name: Set Up Git Config
         run: |
           git config --global user.email "devops@lambda256.io"
           git config --global user.name "luniverse-devops"
+
       - name: Bump Chart Image
         working-directory: service/${{ github.event.client_payload.applicationName }}
         run: |
