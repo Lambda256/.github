@@ -23,7 +23,7 @@ jobs:
         run: |
           ARG=$(echo "${{ github.event.comment.body }}" | cut -d' ' -f2-)
           if [ -n "$ARG" ]; then
-            echo "ARG=${ ARG }" >> $GITHUB_ENV
+            echo "ARG=${ARG}" >> $GITHUB_ENV
           fi
 
       - name: Extract name from package.json
