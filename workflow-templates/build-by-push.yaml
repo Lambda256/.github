@@ -81,7 +81,7 @@ jobs:
           script: |
             await github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
-              repo: '<Namespace>-helm-chart',
+              repo: 'lambda-<Namespace>-chart-values',
               event_type: 'webhook',
               client_payload: {
                 actor: '${{ github.actor }}',
