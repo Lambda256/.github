@@ -23,6 +23,7 @@ jobs:
 
       - name: Extract name from package.json
         uses: sergeysova/jq-action@v2
+        id: name
         with:
           cmd: 'jq .name package.json -r'
 
