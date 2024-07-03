@@ -87,7 +87,7 @@ jobs:
               client_payload: {
                 actor: '${{ github.actor }}',
                 ref_name: '${{ github.ref_name }}',
-                applicationName: ${{ steps.name.outputs.value }},
+                applicationName: '${{ steps.name.outputs.value }}',
                 imageTag: 'lambda256/${{ steps.name.outputs.value }}:v${{ steps.version.outputs.value }}-${{ env.COMMIT_SHA }}'
               }
             })
