@@ -19,6 +19,17 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Extract arguments from comment
+        run: |
+          ARGS=$(echo "${{ github.event.comment.body }}" | cut -d' ' -f3-)
+          IFS=' ' read -r DB_HOST DB_PORT DB_DATABASE <<< "$ARGS"
+          DB_HOST=${DB_HOST:-${{ vars.DB_HOST }}}
+          DB_PORT=${DB_PORT:-${{ vars.DB_PORT }}}
+          DB_DATABASE=${DB_DATABASE:-${{ vars.DB_DATABASE }}}
+          echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
+          echo "DB_PORT=$DB_PORT" >> $GITHUB_ENV
+          echo "DB_DATABASE=$DB_DATABASE" >> $GITHUB_ENV
+
       - name: Install git and Configure git to use HTTPS instead of SSH
         run: |
           if ! command -v git &> /dev/null
@@ -49,6 +60,12 @@ jobs:
 
       - name: Run migrations
         run: npm run migrate:run
+        env:
+          DB_HOST: ${{ env.DB_HOST }}
+          DB_PORT: ${{ env.DB_PORT }}
+          DB_DATABASE: ${{ env.DB_DATABASE }}
+          DB_USERNAME: ${{ vars.DB_DEV_MIGRATION_DBA_USERNAME }}
+          DB_CREDENTIAL: ${{ secrets.DB_DEV_MIGRATION_DBA_CREDENTIAL }}
 
       - name: Comment on PR
         uses: actions/github-script@v7
