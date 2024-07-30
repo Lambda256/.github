@@ -17,8 +17,8 @@ jobs:
 
       - name: Set Up Git Config
         run: |
-          git config --global user.email "devops@lambda256.io"
-          git config --global user.name "luniverse-devops"
+          git config --global user.email ${{ vars.PA_USEREMAIL_LUNIVERSEDEVOPS }}
+          git config --global user.name ${{ vars.PA_USERNAME_LUNIVERSEDEVOPS }}
 
       - name: Bump Chart Image
         working-directory: service/${{ github.event.client_payload.applicationName }}
