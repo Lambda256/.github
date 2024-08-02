@@ -1,0 +1,11 @@
+{
+    "name": "Migrate db by manually",
+    "description": "CI workflow - Migrate luniverse-dev database by manually.",
+    "iconName": "octicon database",
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$",
+        "ormconfig.ts$"
+    ]
+}

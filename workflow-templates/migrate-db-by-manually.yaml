@@ -1,0 +1,78 @@
+name: Migrate luniverse-dev database by manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      db_host:
+        description: 'Target DB host'
+        required: true
+        default: ''
+      db_port:
+        description: 'Target DB port'
+        required: true
+        default: ''
+      db_database:
+        description: 'Target DB database'
+        required: true
+        default: ''
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  migrate:
+    runs-on: arc-runner-set-dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Install git and Configure git to use HTTPS instead of SSH
+        run: |
+          if ! command -v git &> /dev/null
+          then
+            echo "Git could not be found, installing Git..."
+            sudo apt-get update
+            sudo apt-get install -y git
+          fi
+          git config --global url."https://${{secrets.PA_TOKEN_LUNIVERSEDEVOPS}}@github.com/".insteadOf ssh://git@github.com/
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # 필요에 따라 Node.js 버전 조정
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --include=dev
+
+      - name: Run migrations
+        run: npm run migrate:run
+        env:
+          DB_HOST: ${{ github.event.inputs.db_host }}
+          DB_PORT: ${{ github.event.inputs.db_port }}
+          DB_DATABASE: ${{ github.event.inputs.db_database }}
+          DB_USERNAME: ${{ vars.DB_DEV_MIGRATION_DBA_USERNAME }}
+          DB_CREDENTIAL: ${{ secrets.DB_DEV_MIGRATION_DBA_CREDENTIAL }}
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({            
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Migrate luniverse-dev db successfully'
+            })
