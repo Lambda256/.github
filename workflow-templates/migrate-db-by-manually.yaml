@@ -27,6 +27,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
+          ref: ${{ github.head_ref }}
           persist-credentials: false
 
       - name: Install git and Configure git to use HTTPS instead of SSH
