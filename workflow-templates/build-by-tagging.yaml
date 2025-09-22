@@ -50,8 +50,6 @@ jobs:
           tags: lambda256/${{ env.DOCKERHUB_REPO }}:${{ steps.name.outputs.value }}_${{ env.TAG }}
           build-args: |
             "PAT=${{ secrets.PA_TOKEN_LUNIVERSEDEVOPS }}"
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Send Slack Notification
         id: slack

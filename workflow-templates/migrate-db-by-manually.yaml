@@ -55,7 +55,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci --include=dev
 
       - name: Run migrations
