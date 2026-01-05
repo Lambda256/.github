@@ -12,7 +12,7 @@ jobs:
   build:
     if: ${{ startsWith(github.event.comment.body, '/build') }}
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-2core
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

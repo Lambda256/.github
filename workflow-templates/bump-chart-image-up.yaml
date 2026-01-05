@@ -10,7 +10,7 @@ concurrency: ${{ github.workflow }}
 jobs:
   bump:
     name: Bump up
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-2core
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
