@@ -15,10 +15,18 @@ jobs:
     runs-on: arc-runner-set-dev
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
           persist-credentials: false
+
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.REPO_ACCESS_APP_ID }}
+          private-key: ${{ secrets.REPO_ACCESS_APP_PK }}
+          owner: ${{ github.repository_owner }}
 
       - name: Extract arguments from comment
         run: |
@@ -39,10 +47,10 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y git
           fi
-          git config --global url."https://${{secrets.PA_TOKEN_LUNIVERSEDEVOPS}}@github.com/".insteadOf ssh://git@github.com/
+          git config --global url."https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/".insteadOf ssh://git@github.com/
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v7
         with:
           node-version: '18' # 필요에 따라 Node.js 버전 조정
 
@@ -59,7 +67,7 @@ jobs:
           DB_CREDENTIAL: ${{ secrets.DB_DEV_MIGRATION_DBA_CREDENTIAL }}
 
       - name: Comment on PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             github.rest.issues.createComment({            

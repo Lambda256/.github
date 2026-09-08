@@ -10,12 +10,20 @@ concurrency: ${{ github.workflow }}
 jobs:
   bump:
     name: Bump up
-    runs-on: ubuntu-latest-2core
+    runs-on: ubuntu-latest-2core  # ubuntu-latest-4core
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
+
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.REPO_ACCESS_APP_ID }}
+          private-key: ${{ secrets.REPO_ACCESS_APP_PK }}
+          owner: ${{ github.repository_owner }}
 
       - name: Set Up Git Config
         run: |
@@ -44,7 +52,7 @@ jobs:
             fi
           fi
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v1
         with:
-          github_token: ${{ secrets.PA_TOKEN_LUNIVERSEDEVOPS }}
+          github_token: ${{ steps.app-token.outputs.token }}
           branch: ${{ github.event.client_payload.ref }}
