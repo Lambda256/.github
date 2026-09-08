@@ -23,7 +23,6 @@ jobs:
         with:
           client-id: ${{ vars.REPO_ACCESS_APP_ID }}
           private-key: ${{ secrets.REPO_ACCESS_APP_PK }}
-          owner: ${{ github.repository_owner }}
 
       - name: Set Up Git Config
         run: |
